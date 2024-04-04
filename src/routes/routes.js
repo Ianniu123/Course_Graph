@@ -1,14 +1,49 @@
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('data/database.db')
 
-exports.courses = function(request, response, next) {
-    //get all the sql objects and then send them through
+exports.course = function(request, response) {
+    let code = request.params.code
+    db.all(`SELECT * FROM courses WHERE code = '${code}'`, function(err, rows) {
+        if (rows.length == 0) {
+            response.end("no such course exists")
+            return;
+        }
+        let obj = rows[0]
+        response.render('course', {
+            name: obj.name,
+            description: obj.description,
+            code: obj.code,
+            area: obj.area
+        })
+    })
+}
+
+exports.index = function(request, response) {
+    response.render('index', {})
+}
+
+exports.data = function(req, res) {
     let data = []
-    db.all("SELECT code from courses", function(err, rows) {
+    db.all("SELECT code, area from courses", function(err, rows) {
         //creating each node
         for (let i = 0; i < rows.length; i++) {
+            let color = '#11479e'
+            let area = rows[i].area
+            if (area === 'core') {
+                color = 'blue'
+            } else if (area === 'game development') {
+                color = 'green'
+            } else if (area === 'security') {
+                color = 'red'
+            } else if (area === 'AI') {
+                color = 'yellow'
+            } else {
+                color = 'purple'
+            }
+
             const obj = {
-                data: {id: rows[i].code}
+                style: {'background-color': color},
+                data: {id: rows[i].code, href:`http://localhost:3000/course/${rows[i].code}`}
             }
             data.push(obj)
         }
@@ -22,7 +57,19 @@ exports.courses = function(request, response, next) {
                 }
                 data.push(obj)
             }
-            response.json(data)
+            res.json(data)
+        })
+    })
+}
+
+exports.courses = function(req, res, next) {
+    db.all("SELECT * from courses", function(err, rows) {
+        let courses = []
+        for (let i = 0; i < rows.length; i++) {
+            courses.push(rows[i])
+        }
+        res.render('courses', {
+            courses: courses
         })
     })
 }

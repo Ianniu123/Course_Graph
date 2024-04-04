@@ -1,0 +1,20 @@
+{{> scripts }}
+{{> navbar }}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Course Code</th>
+      <th scope="col">Area</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+    {{#each courses}}
+        <tr>
+            <td>{{this.name}}</td>
+            <th scope="row"><a href="/course/{{this.code}}">{{this.code}}</a></td>
+            <td>{{this.area}}</td>
+        </tr>
+    {{/each}}
+  </tbody>
+</table>
