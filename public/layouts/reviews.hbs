@@ -2,23 +2,25 @@
 {{> navbar }}
 
 <head>
-  <title>Carleton Courses</title>
+  <title>Carleton Course Reviews</title>
 </head>
 
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">Name</th>
+      <th scope="col">Username</th>
       <th scope="col">Course Code</th>
-      <th scope="col">Area</th>
+      <th scope="col">Review</th>
+      <th scope="col">Rating</th>
     </tr>
   </thead>
   <tbody class="table-group-divider">
-    {{#each courses}}
+    {{#each reviews}}
         <tr>
-            <td>{{this.name}}</td>
+            <td>{{this.user}}</td>
             <th scope="row"><a href="/course/{{this.code}}">{{this.code}}</a></td>
-            <td>{{this.area}}</td>
+            <td>{{this.review}}</td>
+            <td>{{this.rating}}</td>
         </tr>
     {{/each}}
   </tbody>

@@ -1,0 +1,24 @@
+{{> scripts }}
+{{> navbar }}
+<head>
+  <title>Carleton Course Graph Users</title>
+</head>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Username</th>
+      <th scope="col">Password</th>
+      <th scope="col">Role</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+    {{#each users}}
+        <tr>
+            <td>{{this.username}}</td>
+            <td>{{this.password}}</td>
+            <td>{{this.role}}</td>
+        </tr>
+    {{/each}}
+  </tbody>
+</table>

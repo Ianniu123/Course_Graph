@@ -1,0 +1,22 @@
+{{>scripts}}
+
+<head>
+  <title>Carleton Course Graph Login</title>
+</head>
+
+<div class="p-5">
+    <h1>Login</h1>
+    <form class="w-25" id="login" method="post" action="/validate">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp" required/>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required/>
+        </div>
+        <a href="/register">Register</a><br>
+        <input id="submit" type="submit" class="btn btn-primary">
+    </form>
+</div>
+<script src="../js/authorization.js"></script>

@@ -1,7 +1,35 @@
 {{> scripts }}
 {{> navbar }}
+<head>
+  <title> {{this.code}} </title>
+</head>
 
-<h1>Course Name: {{ this.name }}</h1>
-<h1>Course Code: {{ this.code }}</h1>
-<h1>Area of Focus: {{ this.area }}</h1>
-<p>Description: {{ this.description }}</p>
+<div class="p-5">
+    <h3>{{ this.code }}: {{ this.name }}</h3>
+
+    <br>
+    <div>
+      <p><b>Area of Focus:</b> {{ this.area }}</p>
+      <p class="w-50"><b>Description:</b> {{ this.description }}</p>
+
+      <p><b>Average Rating:</b> {{ this.avg_rating }}</p>
+    </div>
+
+    <br>
+
+    <div>
+      <p><b>Reviews:</b></p>
+      <ul>
+        {{#each reviews}}
+          <li><b>{{ this.rating }}</b>: {{ this.review}} </li>
+        {{/each}}
+      </ul>
+      <br>
+      <p><b>Add Review</b></p>
+      <form class="w-25" role="review" method="post" action="/reviews">
+          <input class="form-control me-2" id="course_code" name="course_code" type="course_code" placeholder={{this.code}} value={{ this.code }} readonly>
+          <input class="form-control me-2" id="review" name="review" type="review">
+          <button class="btn btn-outline-success" type="submit">submit</button>
+      </form>
+    </div>
+</div>
