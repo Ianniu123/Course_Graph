@@ -1,10 +1,12 @@
 <h1>Carleton Course Graph</h1>
 
-Used Cytoscape JS to create a graph representation of all the courses at Carleton<br>
-Incoming edges indicate a prerequisite course<br>
-Users are able to add reviews to the course, and ratings (1-5) will be generated using a DistilBERT model.<br>
-An accuracy of approximately 80% was achieved on test data<br>
-Model is hosted on Hugging Face Inferecence Point<br>
+<ul>
+<li>Used Cytoscape JS to create a graph representation of all the courses at Carleton</li><br>
+<li>Incoming edges indicate a prerequisite course</li><br>
+<li>Users are able to add reviews to the course, and ratings (1-5) will be generated using a DistilBERT model.</li><br>
+<li>An accuracy of approximately 80% was achieved on test data</li><br>
+<li>Model is hosted on Hugging Face Inferecence Point</li><br>
+</ul>
 
 Link to model:
   -https://huggingface.co/Ianniu/my_model
