@@ -1,5 +1,24 @@
+require('dotenv').config()
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('data/database.db')
+
+//querying data from the machine learning model
+async function query(data) {
+	const response = await fetch(
+		process.env.HF_URL,
+		{
+			headers: { 
+				"Accept" : "application/json",
+				"Authorization": `Bearer ${process.env.HF_TOKEN}`,
+				"Content-Type": "application/json" 
+			},
+			method: "POST",
+			body: JSON.stringify(data),
+		}
+	);
+	const result = await response.json();
+	return result;
+}
 
 exports.index = function(request, response) {
     if (!request.session.username) {
@@ -99,8 +118,6 @@ exports.validate = function(request, response, next) {
 exports.createUser = function(request, response, next) {
     let username = request.body.username
     let password = request.body.password
-
-    console.log("Creating new user")
 
     if (username && password) {
         db.all(`INSERT INTO users VALUES('${username}', '${password}', 'guest')`, function(err, rows) {
@@ -261,17 +278,38 @@ exports.createReview = function(request, response, next) {
         let course_code = request.body.course_code
         let review = request.body.review
 
-        let rating = 5 //request from the model api
-
-        if (course_code && review && username) {
-            db.all(`INSERT INTO Ratings VALUES('${username}', '${course_code}', '${review}', ${rating})`, function(err, rows) {
-                if (err) {
-                    response.end(`Error: ${err}`)
-                }
-                response.redirect(`/course/${course_code}`)
-            })
-        } else {
-            response.end("Cannot add empty reviews!")
+        const obj = {
+            "inputs": review,
+            "parameters": {}
         }
+
+        query(obj).then(data => {
+            let rating = 0 //request from the model api
+            let label = data[0].label
+            
+            if (label.indexOf('4') !== -1) {
+                rating = 5
+            } else if (label.indexOf('3') !== -1) {
+                rating = 4
+            } else if (label.indexOf('2') !== -1) {
+                rating = 3
+            } else if (label.indexOf('1') !== -1) {
+                rating = 2
+            } else {
+                rating = 1
+            }
+
+            if (course_code && review && username) {
+                db.all(`INSERT INTO Ratings VALUES('${username}', '${course_code}', '${review}', ${rating})`, function(err, rows) {
+                    if (err) {
+                        response.end(`Error: you have already put a review for this class!`)
+                    } else {
+                        response.redirect(`/course/${course_code}`)
+                    }
+                })
+            } else {
+                response.end("Cannot add empty reviews!")
+            }
+        })
     }
 }
